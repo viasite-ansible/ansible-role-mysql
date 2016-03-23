@@ -47,6 +47,7 @@
     - "{{ ansible_nodename }}"
     - 127.0.0.1
     - localhost
+    - '::1'
   tags: [ mysql ]
 
 - name: Copy .my.cnf file into the root home folder
