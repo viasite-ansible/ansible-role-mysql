@@ -37,7 +37,7 @@
   service: name=mysql state=started
   tags: [ mysql ]
 
-- name: Update MySQL root password
+- name: Update first MySQL root password
   mysql_user:
     name=root
     host={{ item }}
@@ -50,8 +50,21 @@
     #- '::1' # fails on first password update
   tags: [ mysql ]
 
+# after first password define we need to store .my.cnf
 - name: Copy .my.cnf file into the root home folder
   template: src=root-my-cnf.j2 dest=/root/.my.cnf owner=root mode=0600
+  tags: [ mysql ]
+
+- name: Update other MySQL root password
+  mysql_user:
+    name=root
+    host={{ item }}
+    password={{ mysql_root_password }}
+    check_implicit_admin=yes
+  with_items:
+    - 127.0.0.1
+    - localhost
+    #- '::1' # fails on first password update
   tags: [ mysql ]
 
 # must run after .my.cnf update
