@@ -45,9 +45,6 @@
     check_implicit_admin=yes
   with_items:
     - "{{ ansible_nodename }}"
-    - 127.0.0.1
-    - localhost
-    #- '::1' # fails on first password update
   tags: [ mysql ]
 
 # after first password define we need to store .my.cnf
