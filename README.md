@@ -1,10 +1,12 @@
+[![Build Status](https://travis-ci.org/viasite-ansible/ansible-role-mysql.svg?branch=master)](https://travis-ci.org/viasite-ansible/ansible-role-mysql)
+
 ## Features:
 - Install Percona Server
 - Configure my.cnf
 - Configure pt-kill for kill very long queries
 - debops syntax
 - ansible lint
-- gitlab ci with molecule
+- gitlab ci and travis with molecule
 - don't remove installed mysql
 - percona from ubuntu repo
 - all mysql variables wrapped in ansible variables

@@ -1,0 +1,16 @@
+---
+
+language: python
+python: "2.7"
+sudo: required
+services:
+  - docker
+
+install: pip install molecule docker-py
+script: 
+    # normal provision
+    - MYSQL_INNODB_LOG_FILE_SIZE=128M molecule --debug test --destroy=never
+    # test of change log file size
+    - MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug converge
+    # explicitly destroy container
+    - molecule destroy
