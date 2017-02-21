@@ -7,7 +7,7 @@ services:
   - docker
 
 install: pip install molecule docker-py
-script: 
+script:
     # normal provision
     - MYSQL_INNODB_LOG_FILE_SIZE=128M molecule --debug test --destroy=never
     # test of change log file size
