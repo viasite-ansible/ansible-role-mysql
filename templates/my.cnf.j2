@@ -1,97 +1,83 @@
 # {{ ansible_managed }}
+# {{ mysql_config_include_dir }} disabled!
+
 [mysqld]
-user		= mysql
-pid-file	= /var/run/mysqld/mysqld.pid
-socket		= /var/run/mysqld/mysqld.sock
-port		= 3306
-basedir		= /usr
-datadir		= {{ mysql_datadir }}
-tmpdir		= /tmp
-lc-messages-dir	= /usr/share/mysql
-log_error = /var/log/mysql/error.log
-expire_logs_days	= 10
-bind-address		= 127.0.0.1
-max_binlog_size         = 100M
+user             = {{ mysql_user }}
+pid-file         = {{ mysql_pid_file }}
+socket           = {{ mysql_sock_file }}
+port             = {{ mysql_port }}
+datadir          = {{ mysql_datadir }}
+basedir          = {{ mysql_basedir }}
+tmpdir           = {{ mysql_tmpdir }}
+bind-address     = {{ mysql_bind_address }}
+max_binlog_size  = 100M
+expire_logs_days = 10
+lc-messages-dir  = /usr/share/mysql
 skip-external-locking
 
-slow_query_log					= 1
-long_query_time					= 5
-slow_query_log_file				= /var/log/mysql/mysqld-slow-query.log
+# Logging configuration.
+{% if mysql_log_error == 'syslog' or mysql_log_bin == 'syslog' %}
+syslog
+syslog-tag          = {{ mysql_syslog_tag }}
+{% else %}
+{% if mysql_log_bin %}
+log-bin              = {{ mysql_log_bin }}
+{% endif %}
+log-error = {{ mysql_log_error }}
+{% endif %}
+slow_query_log      = {{ mysql_slow_query_log }}
+long_query_time     = {{ mysql_long_query_time }}
+slow_query_log_file = {{ mysql_slow_query_log_file }}
 
-wait_timeout 					= 14400
-
-key_buffer						= 16M
-max_allowed_packet 				= 16M
-thread_stack 					= 192K
-thread_cache_size 				= 16
-myisam-recover					= BACKUP
-
-max_connections					= 200
-max_connect_errors				= 9999999
-
-# do not do high: http://www.percona.com/blog/2009/11/16/table_cache-negative-scalability/
-table_cache 					= 128
-table_open_cache 				= 128
+wait_timeout       = {{ mysql_wait_timeout }}
+key_buffer         = {{ mysql_key_buffer }}
+max_allowed_packet = {{ mysql_max_allowed_packet }}
+thread_stack       = {{ mysql_thread_stack }}
+thread_cache_size  = {{ mysql_thread_cache_size }}
+myisam-recover     = {{ mysql_myisam_recover }}
+max_connections    = {{ mysql_max_connections }}
+max_connect_errors = {{ mysql_max_connect_errors }}
 
 # do not set high: http://www.percona.com/blog/2007/08/18/how-fast-can-you-sort-data-with-mysql/
-sort_buffer_size				= 256K
+sort_buffer_size        = {{ mysql_sort_buffer_size }}
 # do not set high: http://www.percona.com/blog/2007/09/17/mysql-what-read_buffer_size-value-is-optimal/
-read_buffer_size 				= 256K
-join_buffer_size 				= 16M
-read_rnd_buffer_size 			= 16M
-myisam_sort_buffer_size			= 8M
-tmp_table_size 					= 384M
-max_heap_table_size 			= 384M
-thread_concurrency 				= 6
-query_cache_limit 				= 8M
+read_buffer_size        = {{ mysql_read_buffer_size }}
+join_buffer_size        = {{ mysql_join_buffer_size }}
+read_rnd_buffer_size    = {{ mysql_read_rnd_buffer_size }}
+myisam_sort_buffer_size = {{ mysql_myisam_sort_buffer_size }}
+tmp_table_size          = {{ mysql_tmp_table_size }}
+max_heap_table_size     = {{ mysql_max_heap_table_size }}
+thread_concurrency      = {{ mysql_thread_concurrency }}
+transaction-isolation   = {{ mysql_transaction_isolation }}
+
+query_cache_limit        = {{ mysql_query_cache_limit }}
 # do not set high: http://haydenjames.io/mysql-query-cache-size-performance/
-query_cache_size 				= 128M
-query_cache_min_res_unit 		= 512
+query_cache_size         = {{ mysql_query_cache_size }}
+query_cache_min_res_unit = {{ mysql_query_cache_min_res_unit }}
+query_cache_type         = {{ mysql_query_cache_type }} # disabled by default in mysql 5.6+
+# thread_pool_size # default by cpu cores
+# do not do high: http://www.percona.com/blog/2009/11/16/table_cache-negative-scalability/
+# table_cache # split in table_open_cache and table_definition_cache
+table_open_cache        = {{ mysql_table_open_cache }}
 
-query_cache_type = 1 # disabled by default in mysql 5.6+
-# thread_pool_size = 16 # default = cpu cores
-
-innodb_thread_concurrency 		= 6
-innodb_flush_log_at_trx_commit 	= 2
-innodb_lock_wait_timeout 		= 40
-innodb_buffer_pool_size 		= {{ mysql_innodb_buffer_pool_size }}
-innodb_buffer_pool_instances = {{ mysql_innodb_buffer_pool_instances }} # TODO: split by 1G instances
-innodb_additional_mem_pool_size = 20M
+innodb_thread_concurrency       = {{ mysql_innodb_thread_concurrency }}
+innodb_flush_log_at_trx_commit  = {{ mysql_innodb_flush_log_at_trx_commit }}
+innodb_lock_wait_timeout        = {{ mysql_innodb_lock_wait_timeout }}
+innodb_buffer_pool_size         = {{ mysql_innodb_buffer_pool_size }}
+innodb_buffer_pool_instances    = {{ mysql_innodb_buffer_pool_instances }} # TODO: split by 1G instances
+innodb_additional_mem_pool_size = {{ mysql_innodb_additional_mem_pool_size }}
 # http://blog-ru.greenmice.info/2009/02/innodblogfilesize.html
-innodb_log_file_size 			= 128M
-
-innodb_log_buffer_size 			= 32M
-innodb_flush_method 			= O_DIRECT
-innodb_support_xa 				= 0
-innodb_doublewrite 				= 0
-
-innodb_locks_unsafe_for_binlog 	= 1
-transaction-isolation 			= READ-COMMITTED
-
-
-#table_cache					= 5000
-#max_allowed_packet				= 16M
-#binlog_cache_size				= 1M
-#max_heap_table_size			= 128M
-#sort_buffer_size				= 500K
-#join_buffer_size				= 500K
-#thread_cache_size				= 50
-#thread_concurrency				= 16
-#query_cache_size				= 128M
-#query_cache_limit				= 8M
-#query_cache_min_res_unit		= 2K
-#thread_stack					= 192K
-#tmp_table_size					= 384M
-
-#innodb_additional_mem_pool_size = 80M
-#innodb_buffer_pool_size         = 4G
-#innodb_lock_wait_timeout        = 120
-###innodb_log_file_size			= 128M
-#innodb_flush_log_at_trx_commit	= 2
+innodb_log_file_size            = {{ mysql_innodb_log_file_size }}
+innodb_log_buffer_size          = {{ mysql_innodb_log_buffer_size }}
+innodb_flush_method             = {{ mysql_innodb_flush_method }}
+innodb_support_xa               = {{ mysql_innodb_support_xa }}
+innodb_doublewrite              = {{ mysql_innodb_doublewrite }}
+innodb_locks_unsafe_for_binlog  = {{ mysql_innodb_locks_unsafe_for_binlog }}
 
 [mysqldump]
 quick
 quote-names
-max_allowed_packet	= 16M
+max_allowed_packet = 16M
 
-!includedir /etc/mysql/conf.d/
+# {{ mysql_config_include_dir }} disabled!
+#!includedir {{ mysql_config_include_dir }}/

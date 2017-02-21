@@ -1,7 +1,77 @@
 ---
+
 # TODO: generate default password
-mysql_datadir: /var/lib/mysql
-mysql_root_password: "mysql_default_r0ot+password!"
-mysql_ptkill_db: percona
-mysql_innodb_buffer_pool_size: 1G
-mysql_innodb_buffer_pool_instances: 1
+mysql_root_password:       "{{ lookup('password', 'credentials/mysql/root.txt length=16') }}"
+
+# pt-kill
+mysql_ptkill_busy_time:    20
+mysql_ptkill_interval:     5
+mysql_ptkill_ignore_user:  root
+mysql_ptkill_victims:      all
+mysql_ptkill_query_count:  10
+mysql_ptkill_logfile:      /var/log/mysql/pt-kill.log
+mysql_ptkill_db:           percona
+
+# mysql
+mysql_user:                mysql
+mysql_pid_file:            /var/run/mysqld/mysqld.pid
+mysql_sock_file:           /var/run/mysqld/mysqld.sock
+mysql_port:                3306
+mysql_basedir:             /usr
+mysql_tmpdir:              /tmp
+mysql_bind_address:        127.0.0.1
+mysql_datadir:             /var/lib/mysql
+mysql_config_include_dir:  /etc/mysql/conf.d
+mysql_debian_sys_maint_password: "{{ lookup('password', 'credentials/mysql/debian-sys-maint.txt length=16') }}"
+
+# logging
+mysql_log_bin:             '' # set 'syslog' to write to syslog
+mysql_log_error:           /var/log/mysql/error.log # set 'syslog' to write to syslog
+mysql_slow_query_log:      0
+mysql_long_query_time:     5
+mysql_slow_query_log_file: /var/log/mysql/slow-query.log
+
+mysql_wait_timeout:        14400
+mysql_key_buffer:          16M
+mysql_max_allowed_packet:  16M
+mysql_thread_stack:        192K
+mysql_thread_cache_size:   16
+mysql_myisam_recover:      BACKUP
+mysql_max_connections:     200
+mysql_max_connect_errors:  9999999
+# do not set high: http://www.percona.com/blog/2007/08/18/how-fast-can-you-sort-data-with-mysql/
+mysql_sort_buffer_size:    256K
+# do not set high: http://www.percona.com/blog/2007/09/17/mysql-what-read_buffer_size-value-is-optimal/
+mysql_read_buffer_size:    256K
+mysql_join_buffer_size:    16M
+mysql_read_rnd_buffer_size: 16M
+mysql_myisam_sort_buffer_size: 8M
+mysql_tmp_table_size:      384M
+mysql_max_heap_table_size: 384M
+mysql_thread_concurrency:  6
+mysql_transaction_isolation: READ-COMMITTED
+
+# cache
+mysql_query_cache_limit:   8M
+# do not set high: http://haydenjames.io/mysql-query-cache-size-performance/
+mysql_query_cache_size:    128M
+mysql_query_cache_min_res_unit: 512
+mysql_query_cache_type:    1 # disabled by default in mysql 5.6+
+# thread_pool_size # default by cpu cores
+# do not do high: http://www.percona.com/blog/2009/11/16/table_cache-negative-scalability/
+mysql_table_open_cache:    128
+
+# innodb
+mysql_innodb_thread_concurrency:       6
+mysql_innodb_flush_log_at_trx_commit:  2
+mysql_innodb_lock_wait_timeout:        40
+mysql_innodb_buffer_pool_size:         1G # don't set more than 80% of RAM
+mysql_innodb_buffer_pool_instances:    1 # TODO: split by 1G instances
+mysql_innodb_additional_mem_pool_size: 20M
+# http://blog-ru.greenmice.info/2009/02/innodblogfilesize.html
+mysql_innodb_log_file_size:            128M
+mysql_innodb_log_buffer_size:          32M
+mysql_innodb_flush_method:             O_DIRECT
+mysql_innodb_support_xa:               0
+mysql_innodb_doublewrite:              0
+mysql_innodb_locks_unsafe_for_binlog:  1

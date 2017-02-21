@@ -1,4 +1,4 @@
 ---
-- include: percona.yml
+- include: install.yml
 - include: configuration.yml
 - include: pt-kill.yml

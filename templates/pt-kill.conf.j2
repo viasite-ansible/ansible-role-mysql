@@ -1,10 +1,10 @@
 # {{ ansible_managed }}
-busy-time=20
-interval=5
-ignore-user="root"
-victims=all
-query-count=10
+busy-time={{ mysql_ptkill_busy_time }}
+interval={{ mysql_ptkill_interval }}
+ignore-user={{ mysql_ptkill_ignore_user }}
+victims={{ mysql_ptkill_victims }}
+query-count={{ mysql_ptkill_query_count }}
 kill
-log=/var/log/pt-kill.log
+log={{ mysql_ptkill_logfile }}
 create-log-table
 log-dsn=D={{ mysql_ptkill_db }},t=kill

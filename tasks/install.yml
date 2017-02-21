@@ -1,0 +1,62 @@
+---
+
+# repo
+
+# don't need for ubuntu 16.04
+#- name: Obtaining percona public key
+#  apt_key:
+#    url=https://www.percona.com/downloads/RPM-GPG-KEY-percona
+#    state=present
+#  tags: [ mysql ]
+
+#- name: Adding percona repository
+#  apt_repository:
+#    repo="deb http://repo.percona.com/apt {{ ansible_distribution_release }} main"
+#    state=present
+#  tags: [ mysql ]
+
+#- name: Adding percona source repository
+#  apt_repository:
+#    repo="deb-src http://repo.percona.com/apt {{ ansible_distribution_release }} main"
+#    state=present
+#  tags: [ mysql ]
+
+- name: Update apt cache
+  apt:
+    update_cache: yes
+    cache_valid_time: 3600
+  tags: [ mysql ]
+
+- name: Ensure pip installed
+  apt:
+    name: python-pip
+    state: present
+  tags: [ mysql ]
+
+
+# install
+
+#- name: Ensure MySQL server is uninstalled
+#  apt:
+#    name: "{{ item }}"
+#    state: absent
+#  with_items:
+#    - mysql-server
+#    #- mysql-server-core-5.5
+#    - mysql-client
+#    #- mysql-client-5.5
+#    #- mysql-client-core-5.5
+#  tags: [ mysql ]
+
+- name: Install percona database server
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - percona-server-server-5.6
+    #- percona-server-client-5.6
+    - percona-toolkit
+    - percona-xtrabackup
+    - python-mysqldb
+  register: mysql_installation
+  tags: [ mysql ]

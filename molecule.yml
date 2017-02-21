@@ -1,0 +1,22 @@
+---
+dependency:
+  name: galaxy
+
+driver:
+  name: docker
+docker:
+  containers:
+    - name: ansible-role-mysql
+      image: ubuntu
+      image_version: latest
+      ansible_groups:
+        - group1
+
+verifier:
+  name: testinfra
+
+ansible:
+  playbook: tests/playbook.yml
+  group_vars:
+    all:
+      mysql_innodb_log_file_size: ${MYSQL_INNODB_LOG_FILE_SIZE}
