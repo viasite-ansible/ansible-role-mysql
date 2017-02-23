@@ -9,6 +9,6 @@ test:
     # test of change log file size
     - MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug converge
     # test idempotence
-    - MYSQL_INNODB_LOG_FILE_SIZE=64M idempotence --debug converge
+    - MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug idempotence
     # explicitly destroy container
     - molecule destroy
