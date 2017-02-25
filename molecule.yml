@@ -9,6 +9,8 @@ docker:
     - name: ansible-role-mysql
       image: ubuntu
       image_version: latest
+      volume_mounts:
+        - ${MOLECULE_APTPROXY_PATH}:/etc/apt/apt.conf.d/00aptproxy
       ansible_groups:
         - group1
 
@@ -19,4 +21,4 @@ ansible:
   playbook: tests/playbook.yml
   group_vars:
     all:
-      mysql_innodb_log_file_size: ${MYSQL_INNODB_LOG_FILE_SIZE}
+      mysql_innodb_log_file_size: ${MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE}

@@ -8,14 +8,17 @@ services:
 
 install: pip install molecule docker-py
 script:
-    # normal provision
-    - MYSQL_INNODB_LOG_FILE_SIZE=128M molecule --debug test --destroy=never
-    # test of change log file size
-    - MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug converge
-    # test idempotence
-    - MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug idempotence
-    # explicitly destroy container
-    - molecule destroy
+  - export MOLECULE_APTPROXY_PATH="$PWD/00aptproxy"
+  - touch "$MOLECULE_APTPROXY_PATH"
+
+  # normal provision
+  - MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=128M molecule --debug test --destroy=never
+  # test of change log file size
+  - MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug converge
+  # test idempotence
+  - MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug idempotence
+  # explicitly destroy container
+  - molecule destroy
 
 notifications:
   webhooks: https://galaxy.ansible.com/api/v1/notifications/
