@@ -5,10 +5,11 @@
 test:
   script:
     # normal provision
-    - MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=128M molecule --debug test --destroy=never
+    - export MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=128M
+    - molecule test --destroy=never
+
     # test of change log file size
-    - MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug converge
-    # test idempotence
-    - MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=64M molecule --debug idempotence
-    # explicitly destroy container
+    - export MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=64M
+    - molecule converge
+    - molecule idempotence
     - molecule destroy

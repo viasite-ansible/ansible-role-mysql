@@ -1,4 +1,7 @@
 ---
 - include: install.yml
+  tags: [ mysql, install ]
 - include: configuration.yml
+  tags: [ mysql, configure ]
 - include: pt-kill.yml
+  tags: [ mysql, pt-kill ]

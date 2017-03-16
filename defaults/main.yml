@@ -65,7 +65,7 @@ mysql_table_open_cache:    128
 mysql_innodb_thread_concurrency:       6
 mysql_innodb_flush_log_at_trx_commit:  2
 mysql_innodb_lock_wait_timeout:        40
-mysql_innodb_buffer_pool_size:         1G # don't set more than 80% of RAM
+mysql_innodb_buffer_pool_size:         1G # don't set more than 80% of RAM # TODO: {{ ansible_memtotal_mb }} / 2
 mysql_innodb_buffer_pool_instances:    1 # TODO: split by 1G instances
 mysql_innodb_additional_mem_pool_size: 20M
 # http://blog-ru.greenmice.info/2009/02/innodblogfilesize.html

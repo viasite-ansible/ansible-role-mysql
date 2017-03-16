@@ -2,15 +2,14 @@
 galaxy_info:
   author: Stanislav Popov
   company: Viasite
-  description: Install Percona Server
+  description: Install Percona Server 5.6
   license: MIT
   min_ansible_version: 1.8
   platforms:
     - name: Ubuntu
       versions:
-        - trusty
         - xenial
-  categories:
+  galaxy_tags:
     - system
     - database
 dependencies: []
