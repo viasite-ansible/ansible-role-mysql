@@ -1,7 +1,4 @@
 ---
-
-#image: popstas/ubuntu-molecule:latest
-
 test:
   script:
     # normal provision
