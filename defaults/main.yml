@@ -2,6 +2,7 @@
 mysql_root_password:       "{{ lookup('password', 'credentials/mysql/root.txt length=16') }}"
 
 # pt-kill
+mysql_ptkill_enabled:      no
 mysql_ptkill_busy_time:    20
 mysql_ptkill_interval:     5
 mysql_ptkill_ignore_user:  root

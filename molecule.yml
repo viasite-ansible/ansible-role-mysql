@@ -9,6 +9,18 @@ docker:
       volume_mounts:
         - ${MOLECULE_APTPROXY_PATH}:/etc/apt/apt.conf.d/00aptproxy
 
+#driver:
+#  name: vagrant
+#vagrant:
+#  platforms:
+#    - name: xenial64
+#      box: bento/ubuntu-16.04
+#  providers:
+#    - name: virtualbox
+#      type: virtualbox
+#  instances:
+#    - name: vagrant-01
+
 ansible:
   playbook: tests/playbook.yml
   group_vars:
