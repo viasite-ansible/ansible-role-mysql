@@ -32,6 +32,7 @@
 - name: Create slow query log file (if configured).
   shell: "touch {{ mysql_slow_query_log_file }} creates={{ mysql_slow_query_log_file }}"
   when: mysql_slow_query_log_enabled
+  tags: skip_ansible_lint
 
 - name: Create datadir if it does not exist
   file:
@@ -54,6 +55,7 @@
 - name: Create error log file (if configured).
   shell: "touch {{ mysql_log_error }} creates={{ mysql_log_error }}"
   when: mysql_log == "" and mysql_log_error != ""
+  tags: skip_ansible_lint
 
 - name: Set ownership on error log file (if configured).
   file:
