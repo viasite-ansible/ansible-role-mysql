@@ -4,8 +4,12 @@
   apt:
     update_cache: yes
     cache_valid_time: 3600
-  tags: [ mysql ]
 
+- name: Check percona datadir
+  stat:
+    path: /var/lib/percona-server
+  register: mysql_register_percona_datadir
+  
 - name: Install percona database server
   apt:
     name: "{{ item }}"
@@ -17,4 +21,9 @@
     - percona-xtrabackup
     - python-mysqldb
   register: mysql_installation
-  tags: [ mysql ]
+
+- name: Delete default percona-server datadir
+  file: 
+    path: /var/lib/percona-server
+    state: absent
+  when: mysql_datadir != '/var/lib/percona-server' and mysql_register_percona_datadir.stat.exists == false
