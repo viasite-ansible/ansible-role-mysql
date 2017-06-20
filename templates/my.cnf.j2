@@ -87,11 +87,14 @@ tmp_table_size = {{ mysql_tmp_table_size }}
 max_heap_table_size = {{ mysql_max_heap_table_size }}
 group_concat_max_len = {{ mysql_group_concat_max_len }}
 join_buffer_size = {{ mysql_join_buffer_size }}
+table_definition_cache = {{ mysql_table_definition_cache }}
 
 # Other settings.
 wait_timeout = {{ mysql_wait_timeout }}
 lower_case_table_names = {{ mysql_lower_case_table_names }}
 event_scheduler = {{ mysql_event_scheduler_state }}
+character-set-server = {{ mysql_character_set_server }}
+collation-server = {{ mysql_collation_server }}
 
 # InnoDB settings.
 {% if mysql_supports_innodb_large_prefix %}
