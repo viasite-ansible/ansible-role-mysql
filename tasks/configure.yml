@@ -30,7 +30,10 @@
   notify: restart mysql
 
 - name: Create slow query log file (if configured).
-  shell: "touch {{ mysql_slow_query_log_file }} creates={{ mysql_slow_query_log_file }}"
+  command: "touch {{ mysql_slow_query_log_file }}"
+  args:
+    creates: "{{ mysql_slow_query_log_file }}"
+    warn: no
   when: mysql_slow_query_log_enabled
   tags: skip_ansible_lint
 
@@ -53,7 +56,10 @@
   when: mysql_slow_query_log_enabled
 
 - name: Create error log file (if configured).
-  shell: "touch {{ mysql_log_error }} creates={{ mysql_log_error }}"
+  command: "touch {{ mysql_log_error }}"
+  args:
+    creates: "{{ mysql_log_error }}"
+    warn: no
   when: mysql_log == "" and mysql_log_error != ""
   tags: skip_ansible_lint
 
