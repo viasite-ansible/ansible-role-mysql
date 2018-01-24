@@ -1,12 +1,6 @@
 ---
 test:
   script:
-    # normal provision
-    - export MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=128M
-    - molecule test --destroy=never
-
-    # test of change log file size
-    - export MOLECULE_MYSQL_INNODB_LOG_FILE_SIZE=64M
-    - molecule converge
-    - molecule idempotence
-    - molecule destroy
+    - molecule test -s default
+    - molecule test -s innodb_log_resize_1
+    - molecule test -s innodb_log_resize_2
