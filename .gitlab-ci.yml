@@ -1,6 +1,4 @@
 ---
 test:
   script:
-    - molecule test -s default
-    - molecule test -s innodb_log_resize_1
-    - molecule test -s innodb_log_resize_2
+    - molecule test
